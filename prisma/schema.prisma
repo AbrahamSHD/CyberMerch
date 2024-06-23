@@ -7,25 +7,67 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Roles {
+  USER
+  ADMIN
+  SUPERUSER
+}
+
+enum ClothingSize {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+  XXXL
+}
+
+enum ClothingGender {
+  MALE
+  FEMALE
+  UNISEX
+}
+
 model User {
-  id       String    @id @unique @default(uuid())
-  name     String
-  price    Float
-  products Product[]
+  id             String    @id @unique @default(uuid())
+  name           String
+  tagName        String
+  email          String
+  password       String
+  emailValidated Boolean?  @default(false)
+  roles          Roles[]   @default([USER])
+  products       Product[]
+  useImg         userImg[]
 }
 
 model Product {
-  id          String   @id @unique @default(uuid())
+  id          String          @id @unique @default(uuid())
   name        String
   description String?
   price       Float
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt()
+  slug        String?
+  stock       Int             @default(0)
+  size        ClothingSize[]  @default([])
+  gender      ClothingGender?
+  tags        String[]        @default([])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt()
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User            @relation(fields: [userId], references: [id])
+  productImg  ImageProduct[]
 }
 
-// model Image {
-//   id String @id @unique @default(uuid())
+model ImageProduct {
+  id        String  @id @unique @default(uuid())
+  url       String
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}
 
-// }
+model userImg {
+  id     String @id @unique @default(uuid())
+  url    String
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
