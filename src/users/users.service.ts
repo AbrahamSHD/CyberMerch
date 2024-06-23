@@ -9,10 +9,16 @@ import {
 import { PrismaClient } from '@prisma/client';
 import { UserDto } from '../common/dtos/user.dto';
 import { UpdateUserDto } from '../common/dtos/update-user.dto';
+import { generateFriendlyUrl } from '../common/utils/format-text.utils';
 
 @Injectable()
 export class UsersService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger('UsersService');
+  private readonly format: generateFriendlyUrl;
+  constructor() {
+    super();
+    this.format = new generateFriendlyUrl();
+  }
 
   async onModuleInit() {
     await this.$connect();
@@ -20,15 +26,23 @@ export class UsersService extends PrismaClient implements OnModuleInit {
   }
 
   async create(userDto: UserDto) {
-    const { name, tagName, email, password } = userDto;
+    const { name, email, password } = userDto;
+    let { tagName } = userDto;
     const userExist = await this.user.findFirst({
       where: { email },
     });
+
     try {
       if (userExist)
         throw new BadRequestException(
           `User with email: ${email} already exist`,
         );
+
+      if (!tagName || tagName.trim() === '') {
+        tagName = this.format.formatText(name);
+      } else {
+        tagName = this.format.formatText(tagName);
+      }
 
       const createUser = await this.user.create({
         data: {
@@ -39,6 +53,7 @@ export class UsersService extends PrismaClient implements OnModuleInit {
         },
       });
 
+      // TODO: Regresar Token
       return createUser;
     } catch (error) {
       this.logger.error(error);
