@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
@@ -27,6 +28,7 @@ export class UserDto {
   @IsString()
   @MinLength(1)
   @MaxLength(50)
+  @IsOptional()
   tagName: string;
 
   @ApiProperty({
