@@ -4,6 +4,8 @@
 /build
 /postgres
 
+migrations/
+
 # Logs
 logs
 *.log
