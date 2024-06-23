@@ -29,6 +29,41 @@ enum ClothingGender {
   UNISEX
 }
 
+enum ProductTag {
+  ELECTRONICS
+  SPORTS
+  CLOTHING
+  HOME
+  BEAUTY
+  FOOD
+  BOOKS
+  TOYS
+  TECH
+  ACCESSORIES
+  FITNESS
+  OUTDOORS
+  MUSIC
+  ART
+  GADGETS
+  GAMES
+  PETS
+  TRAVEL
+  GIFTS
+  DIY
+  PLANTS
+  HEALTH
+  COLLECTIBLES
+  FASHION
+  WEDDING
+  BABY
+  AUTOMOTIVE
+  CLEANING
+  OFFICE
+  PARTY
+  EDUCATION
+  OTHER
+}
+
 model User {
   id             String    @id @unique @default(uuid())
   name           String
@@ -50,7 +85,7 @@ model Product {
   stock       Int             @default(0)
   size        ClothingSize[]  @default([])
   gender      ClothingGender?
-  tags        String[]        @default([])
+  tags        ProductTag[]    @default([])
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt()
   userId      String
