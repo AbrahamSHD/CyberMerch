@@ -24,11 +24,49 @@ export class UsersController {
     status: 201,
     description: 'User was created',
     type: User,
+    links: {
+      self: {
+        operationId: 'createUser',
+        parameters: {
+          name: '$response.body#/',
+          tagName: '$response.body#/',
+          email: '$response.body#/',
+          password: '$response.body#/',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+    links: {
+      details: {
+        operationId: 'getBadRequestDetails',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden, Token Related',
+    links: {
+      tokenInfo: {
+        operationId: 'getTokenInfo',
+      },
+    },
   })
   create(@Body() createUserDto: UserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'User was created',
+    type: User,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
   @Get()
   findAll() {
     return this.usersService.findAll();
