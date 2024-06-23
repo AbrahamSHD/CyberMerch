@@ -32,14 +32,6 @@ export class User {
   email: string;
 
   @ApiProperty({
-    description: 'User Password - It is encrypted when saved',
-    nullable: false,
-    minLength: 12,
-    maxLength: 50,
-  })
-  password: string;
-
-  @ApiProperty({
     description: 'Validated email - Default(false)',
     example: false,
     default: false,
@@ -62,8 +54,7 @@ export class User {
 
   @ApiProperty({
     description: 'User-created products',
-    example: ['http://userImage.png'],
-    default: [],
+    example: 'http://userImage.png',
   })
   useImg?: string;
 }
