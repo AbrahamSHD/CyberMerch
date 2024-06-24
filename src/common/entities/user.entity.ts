@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Roles } from '../interfaces';
+import { ValidRoles } from '../interfaces';
 
 export class User {
   @ApiProperty({
@@ -43,7 +43,7 @@ export class User {
     example: ['ADMIN'],
     default: ['USER'],
   })
-  roles: Roles[];
+  roles: ValidRoles[];
 
   @ApiProperty({
     description: 'User-created products',
