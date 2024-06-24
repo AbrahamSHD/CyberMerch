@@ -10,14 +10,17 @@ import { PrismaClient } from '@prisma/client';
 import { UserDto } from '../common/dtos/user.dto';
 import { UpdateUserDto } from '../common/dtos/update-user.dto';
 import { generateFriendlyUrl } from '../common/utils/format-text.utils';
+import { BcryptAdapter } from 'src/common/config/bcrypt.adapter';
 
 @Injectable()
 export class UsersService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger('UsersService');
   private readonly format: generateFriendlyUrl;
+  private readonly bcrypt: BcryptAdapter;
   constructor() {
     super();
     this.format = new generateFriendlyUrl();
+    this.bcrypt = new BcryptAdapter();
   }
 
   async onModuleInit() {
@@ -26,8 +29,11 @@ export class UsersService extends PrismaClient implements OnModuleInit {
   }
 
   async create(userDto: UserDto) {
-    const { name, email, password } = userDto;
+    const { name, email } = userDto;
     let { tagName } = userDto;
+    let { password } = userDto;
+
+    password = this.bcrypt.hash(password);
     const userExist = await this.user.findFirst({
       where: { email },
     });
@@ -82,7 +88,7 @@ export class UsersService extends PrismaClient implements OnModuleInit {
 
       return user;
     } catch (error) {
-      this.logger.log(error);
+      this.logger.error(error);
       throw new NotFoundException(`User with id/email: '${term}' not found`);
     }
   }
