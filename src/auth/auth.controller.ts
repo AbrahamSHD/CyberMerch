@@ -1,15 +1,20 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
+import { UserDto } from '../common/dtos/user.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  loginUser() {}
+  @Post(':id')
+  loginUser(@Param('id', ParseUUIDPipe) userDto: UserDto) {
+    return this.authService.login(userDto);
+  }
 
   @Post()
-  logoutUser() {}
+  logoutUser(@Param('id', ParseUUIDPipe) logoutUserDto: UserDto) {
+    return this.authService.logout(logoutUserDto);
+  }
 }

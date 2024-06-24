@@ -30,8 +30,7 @@ export class UsersService extends PrismaClient implements OnModuleInit {
 
   async create(userDto: UserDto) {
     const { name, email } = userDto;
-    let { tagName } = userDto;
-    let { password } = userDto;
+    let { tagName, password } = userDto;
 
     password = this.bcrypt.hash(password);
     const userExist = await this.user.findFirst({
