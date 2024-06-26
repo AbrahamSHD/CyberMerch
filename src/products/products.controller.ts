@@ -10,7 +10,8 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Product } from './entities/product.entity';
 
 @ApiTags('Products')
 @Controller('products')
@@ -18,7 +19,22 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  @ApiResponse({
+    status: 201,
+    description: 'Product was created',
+    links: {
+      self: {
+        operationId: 'createProduct',
+        parameters: {
+          name: '$response.body#/',
+          description: '$response.body#/',
+          price: '$response.body#/',
+        },
+      },
+    },
+    type: Product,
+  })
+  createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
@@ -27,9 +43,9 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  @Get(':term')
+  findOneByTerm(@Param('term') term: string) {
+    return this.productsService.findOneByTerm(term);
   }
 
   @Patch(':id')

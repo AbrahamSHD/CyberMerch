@@ -20,7 +20,7 @@ export class Product {
     minLength: 2,
     maxLength: 100,
   })
-  name: string;
+  title: string;
 
   @ApiProperty({
     description: 'General information about the product',

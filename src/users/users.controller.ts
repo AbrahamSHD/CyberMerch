@@ -45,38 +45,66 @@ export class UsersController {
       },
     },
   })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden, Token Related',
-    links: {
-      tokenInfo: {
-        operationId: 'getTokenInfo',
-      },
-    },
-  })
-  create(@Body() createUserDto: UserDto) {
+  createUser(@Body() createUserDto: UserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @ApiResponse({
     status: 201,
-    description: 'User was created',
+    description: 'Get all users',
+    links: {
+      self: {
+        operationId: 'findAll',
+      },
+    },
     type: User,
   })
   @ApiResponse({
     status: 400,
     description: 'Bad Request',
+    links: {
+      details: {
+        operationId: 'getBadRequestDetails',
+      },
+    },
   })
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'Get user by term: ["id", "tagName", "email"]',
+    type: User,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
   @Get(':term')
-  findOne(@Param('term') term: string) {
+  findOneByTerm(@Param('term') term: string) {
     return this.usersService.findOneByTerm(term);
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'Update user by id',
+    type: User,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden, Token Related',
+    links: {
+      tokenInfo: {
+        operationId: 'update',
+      },
+    },
+  })
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -85,6 +113,28 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'Delete user by id',
+    links: {
+      tokenInfo: {
+        operationId: 'delete',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden, Token Related',
+    links: {
+      tokenInfo: {
+        operationId: 'remove',
+      },
+    },
+  })
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.remove(id);
