@@ -1,11 +1,8 @@
 import {
   BadRequestException,
   Controller,
-  FileTypeValidator,
   Get,
-  MaxFileSizeValidator,
   Param,
-  ParseFilePipe,
   Post,
   Res,
   UploadedFile,
@@ -52,22 +49,5 @@ export class FilesController {
 
     const secureUrl = `${this.configService.get('HOST_API')}/files/product/${file.filename}`;
     return { secureUrl };
-  }
-
-  @Post('product2')
-  uploadFileTwo(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 1000 }),
-          new FileTypeValidator({ fileType: 'image/jpeg' }),
-          new FileTypeValidator({ fileType: 'image/png' }),
-          new FileTypeValidator({ fileType: 'image/jpg' }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
-  ) {
-    return file;
   }
 }
