@@ -24,6 +24,9 @@
 
 6. Ejecutar el comando
 
+   > [!IMPORTANT]
+   > Para ejecutar este comando no debes tener el servidor levantado
+
 ```
   npx prisma generate
 ```
