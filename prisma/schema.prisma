@@ -90,10 +90,10 @@ model Product {
   updatedAt   DateTime        @updatedAt()
   userId      String
   user        User            @relation(fields: [userId], references: [id])
-  productImg  ImageProduct[]
+  productImg  ProductImage[]
 }
 
-model ImageProduct {
+model ProductImage {
   id        String  @id @unique @default(uuid())
   url       String
   productId String
