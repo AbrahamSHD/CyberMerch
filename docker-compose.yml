@@ -1,5 +1,3 @@
-version: '4.31.1'
-
 services:
   postgres-db:
     container_name: ${DB_NAME}
@@ -11,4 +9,4 @@ services:
     volumes:
       - ./postgres:/var/lib/postgresql/data
     ports:
-      - "5432=5432"
+      - 5432:5432

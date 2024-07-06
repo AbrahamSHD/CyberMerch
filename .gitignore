@@ -2,6 +2,9 @@
 /dist
 /node_modules
 /build
+/postgres
+
+migrations/
 
 # Logs
 logs

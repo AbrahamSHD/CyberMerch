@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Abraham",
+    "email": "abraham@gmail.com",
+    "password": "123456789101112"
+  },
+  {
+    "name": "Juan Pérez",
+    "email": "juan.perez@example.com",
+    "password": "ContraseñaSegura1234"
+  },
+  {
+    "name": "María Gómez",
+    "email": "maria.gomez@example.com",
+    "password": "ClaveDeAcceso4567"
+  },
+  {
+    "name": "Carlos Ruiz",
+    "email": "carlos.ruiz@example.com",
+    "password": "Pass1234567890Seguro"
+  },
+  {
+    "name": "Laura Fernández",
+    "email": "laura.fernandez@example.com",
+    "password": "SeguridadAlta9876"
+  },
+  {
+    "name": "Ana Martínez",
+    "email": "ana.martinez@example.com",
+    "password": "ContrasenaLarga3210"
+  },
+  {
+    "name": "José Sánchez",
+    "email": "jose.sanchez@example.com",
+    "password": "AccesoSeguro112233"
+  },
+  {
+    "name": "Elena Díaz",
+    "email": "elena.diaz@example.com",
+    "password": "PasswordFuerte2021"
+  },
+  {
+    "name": "Luis Ramírez",
+    "email": "luis.ramirez@example.com",
+    "password": "ClaveSegura123456"
+  },
+  {
+    "name": "Rosa López",
+    "email": "rosa.lopez@example.com",
+    "password": "ContrasenaSeguro0011"
+  },
+  {
+    "name": "Pedro Torres",
+    "email": "pedro.torres@example.com",
+    "password": "PassLargoYSeguro7890"
+  }
+]

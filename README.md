@@ -22,7 +22,13 @@
   docker-compose up -d
 ```
 
-6. Levantar el modo de desarrollo
+6. Ejecutar el comando
+
+```
+  npx prisma generate
+```
+
+7. Levantar el modo de desarrollo
 
 ```
   npm start:dev
