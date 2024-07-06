@@ -1,4 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class FilesService {}
+export class FilesService {
+  getStaticImage(imageName: string) {
+    return imageName;
+  }
+}
