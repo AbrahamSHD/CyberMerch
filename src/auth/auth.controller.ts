@@ -1,20 +1,24 @@
-import { Controller, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { UserDto } from '../common/dtos/user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { Auth, GetUser } from './decorators';
+import { ValidRoles } from '../common/interfaces';
+import { User } from '../common/entities/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post(':id')
-  loginUser(@Param('id', ParseUUIDPipe) userDto: UserDto) {
+  @Post('login')
+  loginUser(@Body() userDto: LoginUserDto) {
     return this.authService.login(userDto);
   }
 
-  @Post()
-  logoutUser(@Param('id', ParseUUIDPipe) logoutUserDto: UserDto) {
-    return this.authService.logout(logoutUserDto);
+  @Post('logout')
+  @Auth(ValidRoles.USER)
+  logoutUser(@GetUser() user: User) {
+    return this.authService.logout(user);
   }
 }
