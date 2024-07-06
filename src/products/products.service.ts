@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   Logger,
   NotFoundException,
@@ -7,6 +8,7 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaClient } from '@prisma/client';
+import { User } from '../common/entities/user.entity';
 
 @Injectable()
 export class ProductsService extends PrismaClient implements OnModuleInit {
@@ -17,26 +19,44 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     this.logger.log('Database connected');
   }
 
-  async create(createProductDto: CreateProductDto) {
-    // const product = await this.product.create({
-    //   data: {
-    //     title: createProductDto.title,
-    //     description: createProductDto.description,
-    //     price: createProductDto.price,
-    //     slug: createProductDto.slug,
-    //     stock: createProductDto.stock,
-    //     size: createProductDto.size,
-    //     gender: createProductDto.gender,
-    //     tags: createProductDto.tags,
-    //     userId: createProductDto.userId,
-    //     productImg: createProductDto.productImg,
-    //   },
-    // });
-    // return product;
+  async create(user: User, createProductDto: CreateProductDto) {
+    try {
+      const { id } = user;
+      const { productImg = [], title, ...dataProduct } = createProductDto;
+
+      const existProduct = await this.findOneByTerm(title);
+
+      if (existProduct)
+        throw new BadRequestException(`Product with title: ${title} not found`);
+
+      const product = await this.product.create({
+        data: {
+          title,
+          ...dataProduct,
+          userId: id,
+          productImg: {
+            create: productImg.map((image) => ({ url: image })),
+          },
+        },
+        include: {
+          productImg: true,
+        },
+      });
+      return {
+        ...product,
+        images: product.productImg.map((image) => image.url),
+      };
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   async findAll() {
-    return this.product.findMany();
+    try {
+      return this.product.findMany();
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   async findOneByTerm(term: string) {
@@ -60,11 +80,15 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     }
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: string, user: User, updateProductDto: UpdateProductDto) {
+    return {
+      id,
+      user: user.id,
+      updateProductDto,
+    };
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return `This action removes a #${id} product`;
   }
 }

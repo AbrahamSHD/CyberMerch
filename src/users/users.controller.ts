@@ -11,15 +11,22 @@ import {
 import { UsersService } from './users.service';
 import { UserDto } from '../common/dtos/user.dto';
 import { UpdateUserDto } from '../common/dtos/update-user.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { User } from '../common/entities/user.entity';
+import { Auth } from '../auth/decorators';
+import { ValidRoles } from '../common/interfaces';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('register')
+  @ApiOperation({ summary: 'Create user' })
   @ApiResponse({
     status: 201,
     description: 'User was created',
@@ -45,10 +52,12 @@ export class UsersController {
       },
     },
   })
+  @Post('register')
   createUser(@Body() createUserDto: UserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({
     status: 201,
     description: 'Get all users',
@@ -73,6 +82,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @ApiOperation({ summary: 'Find a user by term (Id, tagName, email)' })
   @ApiResponse({
     status: 201,
     description: 'Get user by term: ["id", "tagName", "email"]',
@@ -87,10 +97,18 @@ export class UsersController {
     return this.usersService.findOneByTerm(term);
   }
 
+  @ApiOperation({ summary: 'Update a user by ID' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 201,
     description: 'Update user by id',
     type: User,
+    links: {
+      tokenInfo: {
+        operationId: 'update',
+        parameters: { id: 'uuid' },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
@@ -102,10 +120,12 @@ export class UsersController {
     links: {
       tokenInfo: {
         operationId: 'update',
+        parameters: { token: 'token' },
       },
     },
   })
   @Patch(':id')
+  @Auth(ValidRoles.ADMIN)
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -113,9 +133,11 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @ApiOperation({ summary: 'Delete a user by ID' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 201,
-    description: 'Delete user by id',
+    description: 'Delete product by id',
     links: {
       tokenInfo: {
         operationId: 'delete',
@@ -135,6 +157,7 @@ export class UsersController {
       },
     },
   })
+  @Auth(ValidRoles.ADMIN)
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.remove(id);

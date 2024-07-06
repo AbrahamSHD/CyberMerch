@@ -15,7 +15,6 @@ import {
 import {
   ClothingGender,
   ClothingSize,
-  ProductImg,
   ProductTag,
 } from '../../common/interfaces';
 
@@ -162,5 +161,5 @@ export class CreateProductDto {
   @IsArray()
   @IsNotEmpty()
   @IsOptional()
-  productImg: ProductImg[];
+  productImg: string[];
 }

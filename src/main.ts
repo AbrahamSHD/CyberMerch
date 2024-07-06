@@ -19,6 +19,14 @@ async function bootstrap() {
     .setTitle('CyberMerch ResFul API')
     .setDescription('CyberMerch Endpoints')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'Authorization',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
